@@ -1,0 +1,34 @@
+schema_version: 1
+
+module:
+  name: nsx-ambiq-hal-r3
+  type: backend_specific
+  category: sdk_component
+  version: "0.1.0"
+
+support:
+  ambiqsuite: true
+  zephyr: false
+
+build:
+  cmake:
+    package: nsx_soc_apollo3p
+    targets:
+      - nsx::ambiq_hal
+
+depends:
+  required:
+    - nsx-ambiqsuite-r3
+  optional: []
+
+compatibility:
+  boards:
+    - apollo3_evb
+    - apollo3_evb_cygnus
+    - apollo3p_evb
+    - apollo3p_evb_cygnus
+  socs:
+    - apollo3
+    - apollo3p
+  toolchains:
+    - arm-none-eabi-gcc
