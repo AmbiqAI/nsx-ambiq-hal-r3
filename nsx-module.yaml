@@ -10,6 +10,24 @@ support:
   ambiqsuite: true
   zephyr: false
 
+summary: Curated Ambiq HAL wrapper surface for AmbiqSuite r3 targets.
+
+capabilities:
+  - hal_wrapper
+  - ambiq_hal
+  - sdk_component
+
+use_cases:
+  - access supported Ambiq HAL services on r3 targets
+  - wrap raw SDK HAL content behind a stable NSX-facing surface
+  - dependency for platform and BSP integration on r3
+
+agent_keywords:
+  - hal
+  - ambiq
+  - r3
+  - wrapper
+
 build:
   cmake:
     package: nsx_soc_apollo3p
