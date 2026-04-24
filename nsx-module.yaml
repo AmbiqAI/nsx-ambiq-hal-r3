@@ -50,3 +50,4 @@ compatibility:
     - apollo3p
   toolchains:
     - arm-none-eabi-gcc
+    - armclang
