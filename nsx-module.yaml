@@ -36,6 +36,7 @@ build:
 
 depends:
   required:
+    - nsx-cmsis-core
     - nsx-ambiqsuite-r3
   optional: []
 

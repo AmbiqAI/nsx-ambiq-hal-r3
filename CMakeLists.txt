@@ -19,7 +19,6 @@ set(NSX_HAL_LIB_DEFAULT "${NSX_AMBIQSUITE_ROOT}/lib/${NSX_AMBIQ_PART_NAME}/libam
 set(NSX_HAL_LIB "${NSX_HAL_LIB_DEFAULT}" CACHE FILEPATH "Path to AmbiqSuite HAL static library")
 
 set(NSX_AMBIQ_HAL_BUILD_INCLUDES
-    ${NSX_AMBIQSUITE_ROOT}/CMSIS/ARM/Include
     ${NSX_AMBIQSUITE_ROOT}/CMSIS/AmbiqMicro/Include
     ${NSX_AMBIQSUITE_ROOT}/devices
     ${NSX_AMBIQ_MCU_DIR}
@@ -29,7 +28,6 @@ set(NSX_AMBIQ_HAL_BUILD_INCLUDES
 )
 
 set(NSX_AMBIQ_HAL_INSTALL_INCLUDES
-    ${NSX_AMBIQ_INSTALL_BASE}/CMSIS/ARM/Include
     ${NSX_AMBIQ_INSTALL_BASE}/CMSIS/AmbiqMicro/Include
     ${NSX_AMBIQ_INSTALL_BASE}/devices
     ${NSX_AMBIQ_INSTALL_BASE}/mcu/${NSX_AMBIQ_PART_NAME}
@@ -53,7 +51,10 @@ add_library(nsx_ambiq_hal STATIC
 set_target_properties(nsx_ambiq_hal PROPERTIES EXPORT_NAME ambiq_hal_r3)
 add_library(nsx::ambiq_hal ALIAS nsx_ambiq_hal)
 add_library(nsx::ambiq_hal_r3 ALIAS nsx_ambiq_hal)
-target_link_libraries(nsx_ambiq_hal PUBLIC ${NSX_BOARD_FLAGS_TARGET})
+target_link_libraries(nsx_ambiq_hal PUBLIC
+    ${NSX_BOARD_FLAGS_TARGET}
+    nsx::cmsis_core
+)
 target_include_directories(nsx_ambiq_hal PUBLIC ${NSX_AMBIQ_HAL_INCLUDE_ARGS})
 target_compile_definitions(nsx_ambiq_hal PUBLIC NSX_AMBIQSUITE_R3)
 
@@ -67,10 +68,6 @@ else()
     message(FATAL_ERROR "Prebuilt disabled and source fallback disabled for ns-ambiq-hal-r3.")
 endif()
 
-install(DIRECTORY
-    ${NSX_AMBIQSUITE_ROOT}/CMSIS/ARM/Include
-    DESTINATION ${NSX_AMBIQ_INSTALL_BASE}/CMSIS/ARM
-)
 install(DIRECTORY
     ${NSX_AMBIQSUITE_ROOT}/CMSIS/AmbiqMicro/Include
     DESTINATION ${NSX_AMBIQ_INSTALL_BASE}/CMSIS/AmbiqMicro
