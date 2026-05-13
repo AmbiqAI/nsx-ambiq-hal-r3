@@ -15,7 +15,18 @@ option(NSX_AMBIQSUITE_USE_PREBUILT "Use prebuilt AmbiqSuite static libraries" ON
 option(NSX_AMBIQSUITE_USE_SOURCE_FALLBACK "Use local source fallback if prebuilt is disabled" ON)
 
 set(NSX_AMBIQ_INSTALL_BASE "${CMAKE_INSTALL_INCLUDEDIR}/nsx/ambiqsuite/${NSX_AMBIQSUITE_VERSION}")
-set(NSX_HAL_LIB_DEFAULT "${NSX_AMBIQSUITE_ROOT}/lib/${NSX_AMBIQ_PART_NAME}/libam_hal.a")
+
+# Select the correct prebuilt archive for the active toolchain.
+if(NSX_TOOLCHAIN_FAMILY STREQUAL "armclang")
+    set(NSX_HAL_LIB_DEFAULT "${NSX_AMBIQSUITE_ROOT}/lib/${NSX_AMBIQ_PART_NAME}/libam_hal.lib")
+elseif(NSX_TOOLCHAIN_FAMILY STREQUAL "atfe")
+    # ATFE-specific prebuilts are not yet available; fall back to the
+    # GCC-built archive which is AAPCS-compatible.
+    set(NSX_HAL_LIB_DEFAULT "${NSX_AMBIQSUITE_ROOT}/lib/${NSX_AMBIQ_PART_NAME}/libam_hal.a")
+    message(STATUS "ns-ambiq-hal-r3: ATFE prebuilt not available, using GCC variant (AAPCS-compatible)")
+else()
+    set(NSX_HAL_LIB_DEFAULT "${NSX_AMBIQSUITE_ROOT}/lib/${NSX_AMBIQ_PART_NAME}/libam_hal.a")
+endif()
 set(NSX_HAL_LIB "${NSX_HAL_LIB_DEFAULT}" CACHE FILEPATH "Path to AmbiqSuite HAL static library")
 
 set(NSX_AMBIQ_HAL_BUILD_INCLUDES
